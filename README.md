@@ -64,6 +64,9 @@ motioncontrol.Promise = Promise;
 motioncontrol(el, {/* options */});
 ```
 
+### Timing issue
+
+While this library support animation end with a fallback to timeout your code should not be in a forever waiting state. But on the other end, you should pay a little attention about timing issue. If your animation time is longer than the default timeout or any value you provide, the result won't be the one expected. The consequence might vary from undetected to bad user experience. What I mean is that if your promise resolution is used to destroy an animated view, and the timeout fired before the animation has been completed, the user will seen an interrupted animation. It should only be unpleasant. But it could also lead to runtime error depending on what you do in the promise resolution.
 
 ## License
 
