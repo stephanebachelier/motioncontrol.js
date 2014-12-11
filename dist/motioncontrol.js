@@ -14,8 +14,8 @@
   }
 }(this, function () {
 
-  /*! motioncontrol.js - v0.1.1
-   *  Release on: 2014-11-20
+  /*! motioncontrol.js - v0.1.2
+   *  Release on: 2014-12-11
    *  Copyright (c) 2014 Stéphane Bachelier
    *  Licensed MIT */
   'use strict';
@@ -90,7 +90,9 @@
       // which basically make this library :
       // * fake non CSS3 browsers or
       // * fake a transition end if the property is removed
-      setTimeout(motionComplete, timeout);
+      if (!event) {
+        setTimeout(motionComplete, timeout);
+      }
 
       return motion;
     };
