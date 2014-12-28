@@ -14,8 +14,8 @@
   }
 }(this, function () {
 
-  /*! motioncontrol.js - v0.1.2
-   *  Release on: 2014-12-11
+  /*! motioncontrol.js - v0.1.3
+   *  Release on: 2014-12-28
    *  Copyright (c) 2014 Stéphane Bachelier
    *  Licensed MIT */
   'use strict';
@@ -79,19 +79,21 @@
         };
       });
 
-      // add listeners
-      el.addEventListener(event, motionComplete, false);
+      // add motion end control detector function
+      if (event) {
+        // add listeners
+        el.addEventListener(event, motionComplete, false);
+      }
+      else {
+        // add a timeout in case where the transitionend event would not be fired
+        // which basically make this library :
+        // * fake non CSS3 browsers or
+        // * fake a transition end if the property is removed
+        setTimeout(motionComplete, timeout);
+      }
 
       if (trigger) {
         trigger();
-      }
-
-      // add a timeout in case where the transitionend event would not be fired
-      // which basically make this library :
-      // * fake non CSS3 browsers or
-      // * fake a transition end if the property is removed
-      if (!event) {
-        setTimeout(motionComplete, timeout);
       }
 
       return motion;
