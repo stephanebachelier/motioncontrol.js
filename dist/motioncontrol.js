@@ -14,7 +14,7 @@
   }
 }(this, function () {
 
-  /*! motioncontrol.js - v0.2.2
+  /*! motioncontrol.js - v0.2.3
    *  Release on: 2014-12-29
    *  Copyright (c) 2014 Stéphane Bachelier
    *  Licensed MIT */
@@ -53,6 +53,10 @@
     return fn && ('function' === typeof fn);
   };
 
+  var result = function (something) {
+    return isFunction(something) ? something() : something;
+  };
+
   var motioncontrol = (function () {
     var addEventsListener = function (el, callback, events) {
       for (var event in events) {
@@ -69,7 +73,6 @@
     return function (el, options) {
       var resolver = {};
       var opts = options || {};
-      var trigger = opts.trigger && isFunction (opts.trigger) ? opts.trigger :  null;
       var timeout = false !== opts.timeout ? opts.timeout || 1000 : false;
 
       var timeoutHandler; // reference return by setTimeout;
@@ -125,13 +128,13 @@
         timeoutHandler = setTimeout(motionComplete, timeout);
       }
 
-      if (trigger) {
+      var trigger = null !== opts.trigger && undefined !== opts.trigger ? opts.trigger : null;
+
+      if (trigger && (false === result(trigger))) {
         // enable abortion if trigger return false
         // in other word returning false means that animation will not be played. It enable a conditional launch
         // of the animation based on whatever use case criteria
-        if (false === trigger()) {
-          motionComplete();
-        }
+        motionComplete();
       }
 
       return motion;
