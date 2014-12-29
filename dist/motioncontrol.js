@@ -14,7 +14,7 @@
   }
 }(this, function () {
 
-  /*! motioncontrol.js - v0.2.1
+  /*! motioncontrol.js - v0.2.2
    *  Release on: 2014-12-29
    *  Copyright (c) 2014 Stéphane Bachelier
    *  Licensed MIT */
@@ -70,7 +70,7 @@
       var resolver = {};
       var opts = options || {};
       var trigger = opts.trigger && isFunction (opts.trigger) ? opts.trigger :  null;
-      var timeout = opts.timeout || 1000;
+      var timeout = false !== opts.timeout ? opts.timeout || 1000 : false;
 
       var timeoutHandler; // reference return by setTimeout;
 
@@ -82,7 +82,9 @@
         }
 
         // clear existing timeout
-        clearTimeout(timeoutHandler);
+        if (timeout) {
+          clearTimeout(timeoutHandler);
+        }
 
         if (!resolver) {
           // we can safely return as the resolver is only set to null
@@ -119,7 +121,9 @@
       // which basically make this library :
       // * fake non CSS3 browsers or
       // * fake a transition end if the property is removed
-      timeoutHandler = setTimeout(motionComplete, timeout);
+      if (timeout) {
+        timeoutHandler = setTimeout(motionComplete, timeout);
+      }
 
       if (trigger) {
         // enable abortion if trigger return false
