@@ -1,6 +1,6 @@
 {
   "name": "motioncontrol.js",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "An utility to know when your CSS transitions end",
   "main": "dist/motioncontrol.js",
   "author": {

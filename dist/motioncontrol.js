@@ -14,7 +14,7 @@
   }
 }(this, function () {
 
-  /*! motioncontrol.js - v0.2.0
+  /*! motioncontrol.js - v0.2.1
    *  Release on: 2014-12-29
    *  Copyright (c) 2014 Stéphane Bachelier
    *  Licensed MIT */
@@ -72,12 +72,17 @@
       var trigger = opts.trigger && isFunction (opts.trigger) ? opts.trigger :  null;
       var timeout = opts.timeout || 1000;
 
+      var timeoutHandler; // reference return by setTimeout;
+
       var events = [findEvent(transitionEvents), findEvent(animationEvents)];
 
       var motionComplete = function () {
         if (events) {
           removeEventsListener(el, motionComplete, events);
         }
+
+        // clear existing timeout
+        clearTimeout(timeoutHandler);
 
         if (!resolver) {
           // we can safely return as the resolver is only set to null
@@ -114,10 +119,15 @@
       // which basically make this library :
       // * fake non CSS3 browsers or
       // * fake a transition end if the property is removed
-      setTimeout(motionComplete, timeout);
+      timeoutHandler = setTimeout(motionComplete, timeout);
 
       if (trigger) {
-        trigger();
+        // enable abortion if trigger return false
+        // in other word returning false means that animation will not be played. It enable a conditional launch
+        // of the animation based on whatever use case criteria
+        if (false === trigger()) {
+          motionComplete();
+        }
       }
 
       return motion;
